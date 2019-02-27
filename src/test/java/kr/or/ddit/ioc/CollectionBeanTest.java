@@ -25,7 +25,7 @@ public class CollectionBeanTest {
 	@Resource(name="collectionBean")
 	private CollectionBean collectionBean;
 	
-	/**
+	/** 
 	* Method : testCollectionBean
 	* 작성자 : PC08
 	* 변경이력 :
