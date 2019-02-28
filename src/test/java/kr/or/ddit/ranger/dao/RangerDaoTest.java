@@ -5,14 +5,14 @@ import static org.junit.Assert.assertEquals;
 import javax.annotation.Resource;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+import kr.or.ddit.test.LogicTestConfig;
+
+/*@RunWith(SpringJUnit4ClassRunner.class)
 //servlet-context.xml, application-context.xml
-@ContextConfiguration({ "classpath:kr/or/ddit/config/spring/application-context.xml" /*, "classpath:kr/or/ddit/config/spring/servlet-context.xml"*/})
-public class RangerDaoTest {
+@ContextConfiguration({ "classpath:kr/or/ddit/config/spring/application-context.xml" , "classpath:kr/or/ddit/config/spring/servlet-context.xml"})
+*/
+public class RangerDaoTest extends LogicTestConfig{
 
 	@Resource(name="rangerDao")
 	private IRangerDao rangerDao;

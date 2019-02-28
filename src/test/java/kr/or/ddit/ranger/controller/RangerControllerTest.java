@@ -22,6 +22,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
+import kr.or.ddit.test.WebTestConfig;
+
 /*
  * 1. 스프링 컨테이너 설정 필요
  * 		테스트 대상은 RangerController
@@ -35,14 +37,20 @@ import org.springframework.web.servlet.ModelAndView;
  * 
  */
 
+/*
+중복 되니까 WebTestConfig 클래스로 만들어서 상속받음
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:kr/or/ddit/config/spring/servlet-context.xml",
 					"classpath:kr/or/ddit/config/spring/application-context.xml"})
 @WebAppConfiguration	// 스프링 컨테이너를 만들 때 WepApplicationContext로 생성
 						// 미 적용시 applicationContext
-public class RangerControllerTest {
+*/
+
+public class RangerControllerTest extends WebTestConfig{
 	
-	@Autowired
+/*
+ * 	중복 되니까 WebTestConfig 클래스로 만들어서 상속받음
+ 	@Autowired
 	private WebApplicationContext context;
 	private MockMvc mockMvc;
 	
@@ -56,7 +64,7 @@ public class RangerControllerTest {
 	public void setUp(){
 		mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
 	}
-
+*/
 	/**
 	* Method : testGetRangers
 	* 작성자 : PC08
@@ -83,6 +91,13 @@ public class RangerControllerTest {
 
 	}
 	
+	/**
+	* Method : testGetRanger
+	* 작성자 : PC08
+	* 변경이력 :
+	* @throws Exception
+	* Method 설명 : listIndex에 해당하는 레인저 이름 조회
+	*/
 	@Test
 	public void testGetRanger() throws Exception{
 		/***Given***/
