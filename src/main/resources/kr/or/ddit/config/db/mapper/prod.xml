@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="prod">
+<!-- 전체 사용자 조회 -->
+  <select id="getAllProd" resultType="ProdVo">
+    select * from prod 
+  </select>
+  
+  <!-- 특정 분류 조회(lprod_gu) selectUser(String userId) query, dao(test), service(test) -->
+  <select id="selectProd" resultType="ProdVo" parameterType="String">
+  	select prod_id, prod_name, prod_buyer, prod_cost
+  	from prod
+  	where prod_lgu=#{lprod_gu}
+  </select>
+</mapper>
+

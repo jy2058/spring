@@ -10,6 +10,8 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -83,11 +85,18 @@ public class RangerControllerTest extends WebTestConfig{
 		String viewName = mav.getViewName();
 		Map<String, Object> model = mav.getModel();
 		List<String> rangers = (List<String>) model.get("rangers");
+		//----------------------------------------------------------------------------
+		List<String> boardGbList = (List<String>) model.get("boardGb"); // @ModelAttribute가 적용 된 메소드가 @RequestMapping이 적용 된 메소드보다 
+																		// 먼저 실행되는 지 테스트
+		
 		
 		/***Then***/
 		assertEquals("ranger/rangerList", viewName);
 		assertNotNull(rangers);
 		assertEquals(5, rangers.size());
+		//----------------------------------------------------
+		assertNotNull(boardGbList);
+		assertEquals(4, boardGbList.size());
 
 	}
 	
@@ -111,10 +120,41 @@ public class RangerControllerTest extends WebTestConfig{
 		ModelMap modelMap = mav.getModelMap();
 		String ranger = (String)modelMap.get("ranger");
 		
+		//---------------------------------------------------------
+		List<String> boardGb = (List<String>) modelMap.get("boardGb");
+		
 		/***Then***/
 		assertEquals("ranger/ranger", viewName);
 		assertEquals("sally", ranger);
+		//--------------------------------
+		assertNotNull(boardGb);
+		assertEquals(4, boardGb.size());
 
 	}
+	
+	/**
+	* Method : testGetRangersMav
+	* 작성자 : PC08
+	* 변경이력 :
+	* @throws Exception
+	* Method 설명 : ModelAndView 객체를 이용한 리턴 테스트
+	*/
+	@Test
+	public void testGetRangersMav() throws Exception{
+		/***Given***/
+		
+		/***When***/
+		MvcResult mvcResult = mockMvc.perform(get("/ranger/getRangersMav")).andReturn();
+	
+		ModelAndView mav = mvcResult.getModelAndView();
 
+		/***Then***/
+
+		assertEquals("ranger/rangerList", mav.getViewName());
+		assertEquals(5, ((List<String>)mav.getModel().get("rangers")).size());
+	}
+	
+//	@Test
+//	public void testGetRangerParam
+	
 }

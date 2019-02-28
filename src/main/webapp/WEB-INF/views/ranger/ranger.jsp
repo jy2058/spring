@@ -7,7 +7,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-	ranger : ${ranger }
-
+	rangerVO : ${rVo } <br>
+	ranger : ${ranger } <br>
+	게시판 구분 : ${boardGb } <br>
+	게시판 구분 : ${boardGb2 }
 </body>
 </html>

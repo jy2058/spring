@@ -55,11 +55,13 @@ public class RangerVo {
 		this.regDt = regDt;
 	}
 
+	
 	@Override
 	public String toString() {
-		return "RangetVo [userId=" + userId + ", userNm=" + userNm + ", birth=" + birth + "]";
+		return "RangerVo [userId=" + userId + ", userNm=" + userNm + ", listIndex=" + listIndex + ", birth=" + birth
+				+ ", regDt=" + regDt + "]";
 	}
-	
+
 	public RangerVo(String userId, String userNm, Date birth) {
 		super();
 		this.userId = userId;
