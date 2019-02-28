@@ -56,6 +56,7 @@ public class RangerController {
 		return "ranger/ranger";
 	}
 	
+	//위에 메서드와 비교
 	/*// localhost/ranger/getRanger?listIndex=2 라고 요청시 밑의 메소드에서 요청을 처리
 	@RequestMapping("/getRanger")
 	public String getRanger(HttpServletRequest req, Model model) {
