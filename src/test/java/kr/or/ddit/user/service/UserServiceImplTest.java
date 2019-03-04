@@ -40,6 +40,7 @@ public class UserServiceImplTest extends LogicTestConfig {
 
 		/*** Then ***/
 		// assertEquals(5, userList.size());
+		assertNotNull(userList);
 
 	}
 

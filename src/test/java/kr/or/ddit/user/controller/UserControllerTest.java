@@ -42,6 +42,13 @@ public class UserControllerTest extends WebTestConfig{
 
 	}
 	
+	/**
+	* Method : testUserPagingList
+	* 작성자 : PC08
+	* 변경이력 :
+	* @throws Exception
+	* Method 설명 : 유저 페이징 리스트 조회
+	*/
 	@Test
 	public void testUserPagingList() throws Exception{
 		/***Given***/
@@ -68,5 +75,67 @@ public class UserControllerTest extends WebTestConfig{
 		assertEquals(10, pageSize);
 
 	}
+	
+	/**
+	* Method : testUser
+	* 작성자 : PC08
+	* 변경이력 :
+	* Method 설명 : 사용자 상세 조회 테스트
+	 * @throws Exception 
+	*/
+	@Test
+	public void testUser() throws Exception{
+		/***Given***/
+		MvcResult mvcResult = mockMvc.perform(get("/user/user").param("userId", "brown")).andReturn();
+		
+		/***When***/
+		ModelAndView mav = mvcResult.getModelAndView();
+		
+		String viewName = mav.getViewName();
+		UserVo userVo = (UserVo) mav.getModel().get("userVo");
+		
+		/***Then***/
+		assertEquals("user/user", viewName);
+		assertNotNull(userVo);
+		assertEquals("brown", userVo.getUserId());
+		assertEquals("브라운", userVo.getUserNm());
+		
+	}
+	
+	//@Test
+	//public void testProfileImg(){}
+	
+	/**
+	* Method : testUserForm
+	* 작성자 : PC08
+	* 변경이력 :
+	* @throws Exception
+	* Method 설명 : 사용자 등록 폼 요청
+	*/
+	@Test
+	public void testUserForm() throws Exception{
+		/***Given***/
+		
+		/***When***/
+		MvcResult mvcResult = mockMvc.perform(get("/user/userForm")).andReturn();
+		ModelAndView mav = mvcResult.getModelAndView();
+		String viewName = mav.getViewName();
+		
+		/***Then***/
+		assertEquals("user/userForm", viewName);
+	}
+	
+	@Test
+	public void testUserMofifyForm() throws Exception{
+		/***Given***/
+		MvcResult mvcResult = mockMvc.perform(get("/user/userModifyForm").param("userId", "brown")).andReturn();
+		/***When***/
+		ModelAndView mav = mvcResult.getModelAndView();
 
+		/***Then***/
+		assertEquals("user/userModify", mav.getViewName());
+
+	}
+	
+	
 }

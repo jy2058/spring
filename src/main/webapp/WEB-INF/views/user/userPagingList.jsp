@@ -80,7 +80,7 @@
 						</tbody>
 					</table>
 					
-					<form action="${cp }/userForm" method="get">
+					<form action="${cp }/user/userForm" method="get">
 						<button type="submit" class="btn_btn-default">사용자 등록</button>
 					</form>
 
