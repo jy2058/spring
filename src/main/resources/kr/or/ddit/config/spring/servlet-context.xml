@@ -27,11 +27,11 @@
 	<context:annotation-config/>
 	
 	<!-- use-default-filters="true" 전체 어노테이션 스캔 --><!-- 전체검색 / true면 허용 -->
-	<context:component-scan base-package="kr.or.ddit" use-default-filters="true">
+	<!-- 기본 패키지에서 @Conponent, @Service, @Repository와 같은 스테레오어노테이션을 제외하고(use-default-filters="false") @Controller로 표현된 클래스만 빈으로 등록하겠다.는 의미 -->
+	<context:component-scan base-package="kr.or.ddit" use-default-filters="false">
 	
-		<!-- Controller 어노테이션 빼고 나머지 스캔 제외시키기 -->
-		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
-		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
 <!-- 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Component"/> -->
 	
 	</context:component-scan>

@@ -4,13 +4,27 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
+
+import kr.or.ddit.exception.NoFileException;
+import kr.or.ddit.user.model.UserVo;
+import kr.or.ddit.user.validator.userVoValidator;
 
 @Controller
 public class MvcController {
@@ -60,5 +74,85 @@ public class MvcController {
 		
 		return "mvc/view";
 	}
-
+	
+	@RequestMapping("/textView")
+	public String textView(){
+		
+		return "mvc/textView";
+	}
+	
+	// @RequestParam 어노테이션을 적용하지 않아도 인스턴스 명과 동일하면 바인딩
+	// 파라미터 명과 인스턴스 명과 다를 경우 --> @RequestParam
+	
+	// BindingResult객체는 command객체(vo)에 바인딩 과정에서 발생한 결과를 담는 객체
+	// 반드시 command 객체 메소드 인자 뒤에 위치 해야한다.
+	// O : UserVo userVo, BindingResult result, Model model
+	// X : UserVo userVo, Model model, BindingResult result
+	@RequestMapping("/textReq")
+	public String textReq(UserVo userVo, BindingResult result, Model model){
+		new userVoValidator().validate(userVo, result);
+		
+		logger.debug("userId : {}", userVo.getUserId());
+		logger.debug("pass : {}", userVo.getPass());
+		
+		if(result.hasErrors()){
+			logger.debug("has Error");
+			return "mvc/textView";
+		}
+		
+		return "mvc/textView";
+	}
+	
+	@RequestMapping("/textReqJsr303")
+	public String textReqJsr303(@Valid UserVo userVo, BindingResult result){
+		logger.debug("has errors(jsr303) : {} ", result.hasErrors());
+		return "mvc/textView";
+	}
+	
+	@RequestMapping("/textReqValJsr303")
+	public String textReqValJsr303(@Valid UserVo userVo, BindingResult result){
+		logger.debug("has errors(ValJsr303) : {} ", result.hasErrors());
+		return "mvc/textView";
+	}
+	
+	@InitBinder
+	public void initBinder(WebDataBinder binder){
+		binder.addValidators(new userVoValidator());
+	}
+	
+	/**
+	* Method : throwArithmeticException
+	* 작성자 : PC08
+	* 변경이력 :
+	* @return
+	* Method 설명 : ArithmeticException 강제 발생
+	*/
+	@RequestMapping("/throwArith")
+	public String throwArithmeticException(){
+		if(1==1){
+			throw new ArithmeticException();
+		}
+		return "mvc/textView";
+	}
+	
+	// spring에서 제공하는 예외 처리는 잘 안 씀. jsp에서 했던 xml에서 등록해서 썼던 방식을 씀
+	// controller마다 해야되기 떄문에 @ControllerAdvice 어노테이션을 이용해서 사용한다. (CommonExceptionHandler.java)에 만듦
+	@ExceptionHandler({ArithmeticException.class})
+	public String handleException(){
+		logger.debug("arithmeticException");
+		return "error/error";
+	}
+	
+	@RequestMapping("/throwNoFileException")
+	public String throwNoFileException() throws NoFileException{
+		Resource resource = new ClassPathResource("kr/or/ddit/cofig/spring/no-exsits.xml");
+		
+		try {
+			resource.getFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new NoFileException(); 	// 우리가 만든 예외 추가
+		}
+		return "mvc/textView";
+	}
 }
