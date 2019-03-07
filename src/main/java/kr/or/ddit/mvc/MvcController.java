@@ -2,6 +2,8 @@ package kr.or.ddit.mvc;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -14,13 +16,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import kr.or.ddit.exception.NoFileException;
 import kr.or.ddit.user.model.UserVo;
@@ -154,5 +157,60 @@ public class MvcController {
 			throw new NoFileException(); 	// 우리가 만든 예외 추가
 		}
 		return "mvc/textView";
+	}
+	
+	@RequestMapping("/jsonResponse")
+	public String jsonResponse(Model model){
+		List<String> list = new ArrayList<String>();
+		list.add("brown");
+		list.add("cony");
+		list.add("sally");
+		list.add("james");
+		list.add("moon");
+		
+		model.addAttribute("list", list);
+		
+		return "jsonView";
+		// 우선순위에 따라 BeanNameViewResolver 를 먼저 요청. bean에 jsonView가 있기 때문에 InternalResourceViewResolver를 가지 않는다.
+		// BeanNameViewResolver가 웹브라우저에 list 띄어 줌
+	}
+	
+	@RequestMapping("/jsonResponseViewObj")
+	public View jsonResponseViewObj(Model model){
+		List<String> list = new ArrayList<String>();
+		list.add("brown");
+		list.add("cony");
+		list.add("sally");
+		list.add("james");
+		list.add("moon");
+		
+		model.addAttribute("list", list);
+		
+		return new MappingJackson2JsonView();
+		// 클래스를 리턴해서 위와 같은 효과
+		// 하지만 요청 할 때마다 생성하기 때문에 비 효율적
+	}
+	
+	@RequestMapping("/profileImgView")
+	public String profileImgView(@RequestParam(name="userId", defaultValue="brown")String userId, Model model){
+		model.addAttribute("userId", userId);
+		
+		return "profileImgView";
+	}
+	
+	@RequestMapping("/helloTiles")
+	public String helloTiles(){
+		// 리턴 순서
+		// 1. BeanNameViewResolver
+		// 	helloTiles() 에서 리턴하는 문자열에 해당하는 bean id를 갖는 스프링 빈이 있는지 확인
+		// 		있으면 -> 해당 스프링 객체를 사용하여 응답이 전달
+		//		없으면 -> 다음 view Resolver에서 처리
+		
+		// 2. TilesViewResolver
+		// 	helloTiles() 에서 리턴하는 문자열이 tilesConfigure에 설정 한 tiles 설정파일의 definition 이름(name)과 동일 한 선언이 있는지 확인
+		// 		있으면 -> 해당 tiles 설정대로(layout extends) 응답 생성
+		//		없으면 -> 다음 view Resolver에서 처리
+		
+		return "helloTiles";
 	}
 }
