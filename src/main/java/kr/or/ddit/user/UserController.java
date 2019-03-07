@@ -87,6 +87,60 @@ public class UserController {
 		//return "user/userPagingList";
 		return "userPagingListTiles";
 	}
+	
+	/**
+	* Method : userPagingListAjax
+	* 작성자 : PC08
+	* 변경이력 :
+	* @param pageVo
+	* @param model
+	* @return
+	* Method 설명 : 사용자 페이지 리스트 ajax 요청 처리
+	*/
+	@RequestMapping("/userPagingListAjax")
+	public String userPagingListAjax(PageVo pageVo, Model model) {
+
+		Map<String, Object> resultMap = userService.selectUserPagingList(pageVo);
+
+		model.addAllAttributes(resultMap);
+		model.addAttribute("pageSize", pageVo.getPageSize());
+		model.addAttribute("page", pageVo.getPage());
+		// model 객체 들 : userList, userCnt, pageSize, page
+		
+		// json으로 응답이 갈 때
+		// { userList : [ {userId : 'brown', userNm : '브라운'} ..... {userId : 'sally', userNm : 'sally'} ]
+		// 	 userCnt : "110",
+		//	 pageSize : "10",
+		//	 page : "2"
+		// }
+
+		return "jsonView";
+	}
+	
+	@RequestMapping("/userPagingListAjaxHtml")
+	public String userPagingListAjaxHtml(PageVo pageVo, Model model) {
+		
+		Map<String, Object> resultMap = userService.selectUserPagingList(pageVo);
+		
+		model.addAllAttributes(resultMap);
+		model.addAttribute("pageSize", pageVo.getPageSize());
+		model.addAttribute("page", pageVo.getPage());
+		
+		return "/user/userPagingListAjaxHtml";
+	}
+	
+	/**
+	* Method : userPagingListAjaxView
+	* 작성자 : PC08
+	* 변경이력 :
+	* @return
+	* Method 설명 : 사용자 페이징 리스트 view
+	*/
+	@RequestMapping("/userPagingListAjaxView")
+	public String userPagingListAjaxView() {
+		return "userPagingListAjaxTiles";
+	}
+
 
 	/**
 	 * Method : user 작성자 : PC08 변경이력 :

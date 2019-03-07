@@ -61,6 +61,7 @@ public class UserServiceImpl implements IUserService{
 		
 		resultMap.put("userList", userDao.selectUserPagingList(sqlSession, pageVo));
 		resultMap.put("userCnt", userDao.getUserCnt(sqlSession));
+		sqlSession.close();
 		return resultMap;
 	}
 
