@@ -108,6 +108,7 @@
 		}
 		
 		// 1. 일반적인 Ajax 사용 로직 (jsonView 이용)
+		// ajax 요청을 json응답으로 받아 html 코드를 자바스크립트로 생성
 		function getUserPageList(page){
 			$.ajax({
 				url : "${cp}/user/userPagingListAjax",
@@ -120,6 +121,7 @@
 		}
 		
 		// 2. html(.jsp)로 받아오기
+		// ajax 요청을 html 응답으로 받아 userList / pagination을 split을 하여 html코드를 해당 위치에 삽입
 		function getUserPageListHtml(page){
 			$.ajax({
 				url : "${cp}/user/userPagingListAjaxHtml",
@@ -139,28 +141,53 @@
 					$("#pagination").html(htmlArr[1]);
 					
 					//$("#userListTbody").html(data);
+					
+					// html이 ajax 호출에 의해 정상적으로 생성 된 이후 클릭 이벤트 핸들러를 등록
+					// (success -> 사용자 html이 생성 된 이후에 등록)
+					// 메서드가 요청되기 전에 이벤트가 실행돼서 이벤트가 적용 안 됐던 것을 위치를 여기로 옮겨 
+					// 메서드가 요청 후 이벤트가 실행 될 수 있도록 조정.
+					/* $(".userTr").on("click", function() {
+						console.log("userTr click");
+// 						// 클릭한 userTr태그의 userId 값을 출력
+// 						var userId = $(this).children()[1].innerText;
+// 						console.log(userId); 
+
+// 						var userId = $(this).data("userid");
+
+						// /user
+						// 1. document 방식
+						// document.location = "/user?userId=" + userId;
+
+						// 2. form 방식
+						$("#userId").val(userId);
+						//           $("#frm").attr("action", "/userAllList");
+						$("#frm").submit();
+
+					}); */
+
 				}
 			});
+			
+			
 		}
 		
 		//문서 로딩이 완료된 이후 이벤트 등록
 		$(document).ready(function() {
 			console.log("document ready");
 			
-			//getUserPageList(1, 10);
-			getUserPageListHtml(1);
+			// ajax를 통한 html 생성 시 이벤트 핸들러 등록 방법
+			// 1. html이 ajax 호출에 의해 정상저긍로 생성 된 이후 클릭 이벤트 핸들러를 등록
+			// 	  (success -> 사용자 html이 생성 된 이후에 등록)
+		
+			// 2. 이벤트 핸들러 대상을 변경 (.userTr -> #userListTbody)
+			//	  동적으로 생성되는 html을 감싸는 영역에 이벤트를 등록
+			// 	  단, on 옵션에서 감싸는 영약 안에 처리되어야 할 selector를 명시
+			//	  $(".userTr").on("click", function(){
+			//	  --> $("#userListTbody").on("click", ".userTr", function() {	
 			
-			//msg 속성이 존재하면 alert, 존재하지 않으면 넘어가기
-			<c:if test="${msg != null}">
-				alert("${msg}");
-				<% session.removeAttribute("msg"); %>
-			</c:if>
-
-			// 사용자 tr 태그 클릭시 이벤트 핸들러
-			/* $(".userTr").click(function(){
-			   
-			}); */
-			$(".userTr").on("click", function() {
+			
+			// 사용자 tr 태그 클릭 시 이벤트  핸들러
+			$("#userListTbody").on("click", ".userTr", function() {
 				console.log("userTr click");
 				/* // 클릭한 userTr태그의 userId 값을 출력
 				var userId = $(this).children()[1].innerText;
@@ -178,6 +205,21 @@
 				$("#frm").submit();
 
 			});
+			
+			
+			//getUserPageList(1, 10);
+			getUserPageListHtml(1);
+			
+			//msg 속성이 존재하면 alert, 존재하지 않으면 넘어가기
+			<c:if test="${msg != null}">
+				alert("${msg}");
+				<% session.removeAttribute("msg"); %>
+			</c:if>
+
+			// 사용자 tr 태그 클릭시 이벤트 핸들러
+			/* $(".userTr").click(function(){
+			   
+			}); */
 		});
 	</script>
 

@@ -45,7 +45,7 @@ public class AjaxController {
 		return "jsonView";
 	}
 	
-	// 2. ModelAndView 이용
+	// 2. ModelAndView 이용 // 비추천
 	@RequestMapping("/modelAndView")
 	public ModelAndView modelAndView(){
 		return new ModelAndView("jsonView");
