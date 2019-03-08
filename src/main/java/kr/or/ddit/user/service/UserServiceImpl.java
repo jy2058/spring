@@ -6,16 +6,12 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import kr.or.ddit.db.mybatis.MybatisSqlSessionFactory;
+import org.springframework.stereotype.Service;
+
 import kr.or.ddit.encrypt.kisa.sha256.KISA_SHA256;
 import kr.or.ddit.user.dao.IUserDao;
-import kr.or.ddit.user.dao.UserDaoImpl;
 import kr.or.ddit.user.model.UserVo;
 import kr.or.ddit.util.model.PageVo;
-
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.springframework.stereotype.Service;
 
 @Service("userService")
 public class UserServiceImpl implements IUserService{
@@ -36,32 +32,24 @@ public class UserServiceImpl implements IUserService{
 	* Method 설명 : 전체 사용자 조회
 	*/
 	public List<UserVo> getAllUser(){
-		SqlSessionFactory sqlSessionFactory = MybatisSqlSessionFactory.getSqlSessionFactory();
-		SqlSession sqlSession = sqlSessionFactory.openSession();
-		List<UserVo> userList = userDao.getAllUser(sqlSession);
-		sqlSession.close();
+		List<UserVo> userList = userDao.getAllUser();
 		return userList;
 	}
 
 	@Override
 	public UserVo selectUser(String userId) {
-		SqlSessionFactory sqlSessionFactory = MybatisSqlSessionFactory.getSqlSessionFactory();
-		SqlSession sqlSession = sqlSessionFactory.openSession();
-		UserVo userVo = userDao.selectUser(sqlSession, userId); 
-		sqlSession.close();
+		UserVo userVo = userDao.selectUser(userId); 
 		return userVo;
 	}
 
 	@Override
 	public Map<String, Object> selectUserPagingList(PageVo pageVo) {
-		SqlSessionFactory sqlSessionFactory = MybatisSqlSessionFactory.getSqlSessionFactory();
-		SqlSession sqlSession = sqlSessionFactory.openSession();
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
-		resultMap.put("userList", userDao.selectUserPagingList(sqlSession, pageVo));
-		resultMap.put("userCnt", userDao.getUserCnt(sqlSession));
-		sqlSession.close();
+		resultMap.put("userList", userDao.selectUserPagingList(pageVo));
+		resultMap.put("userCnt", userDao.getUserCnt());
+		
 		return resultMap;
 	}
 
@@ -75,24 +63,16 @@ public class UserServiceImpl implements IUserService{
 	*/
 	@Override
 	public int insertUser(UserVo userVo) {
-		SqlSessionFactory sqlSessionFactory = MybatisSqlSessionFactory.getSqlSessionFactory();
-		SqlSession sqlSession = sqlSessionFactory.openSession();
 		
-		int insertCnt = userDao.insertUser(sqlSession, userVo);
-		sqlSession.commit();
-		sqlSession.close();
+		int insertCnt = userDao.insertUser(userVo);
 		
 		return insertCnt;
 	}
 
 	@Override
 	public int deleteUser(String userId) {
-		SqlSessionFactory sqlSessionFactory = MybatisSqlSessionFactory.getSqlSessionFactory();
-		SqlSession sqlSession = sqlSessionFactory.openSession();
 		
-		int deleteCnt = userDao.deleteUser(sqlSession, userId);
-		sqlSession.commit();
-		sqlSession.close();
+		int deleteCnt = userDao.deleteUser(userId);
 		
 		return deleteCnt;
 	}
@@ -100,12 +80,8 @@ public class UserServiceImpl implements IUserService{
 
 	@Override
 	public int updUser(UserVo userVo) {
-		SqlSessionFactory sqlSessionFactory = MybatisSqlSessionFactory.getSqlSessionFactory();
-		SqlSession sqlSession = sqlSessionFactory.openSession();
 		
-		int updCnt = userDao.updUser(sqlSession, userVo);
-		sqlSession.commit();
-		sqlSession.close();
+		int updCnt = userDao.updUser(userVo);
 		
 		return updCnt;
 	}
@@ -113,20 +89,16 @@ public class UserServiceImpl implements IUserService{
 
 	@Override
 	public int encyptPass() {
-		SqlSessionFactory sqlSessionFactory = MybatisSqlSessionFactory.getSqlSessionFactory();
-		SqlSession sqlSession = sqlSessionFactory.openSession();
 		
 		int updCnt=0;
 		
-		List<UserVo> userList = userDao.getAllUser(sqlSession);
+		List<UserVo> userList = userDao.getAllUser();
 		
 		for(UserVo userVo : userList){
 			userVo.setPass(KISA_SHA256.encrypt(userVo.getPass()));
-			updCnt += userDao.encyptPass(sqlSession, userVo);
+			updCnt += userDao.encyptPass(userVo);
 		}
 		
-		sqlSession.commit();
-		sqlSession.close();
 		
 		return updCnt;
 	}

@@ -2,9 +2,6 @@ package kr.or.ddit.user.dao;
 
 import java.util.List;
 
-import org.apache.ibatis.session.SqlSession;
-import org.springframework.stereotype.Repository;
-
 import kr.or.ddit.user.model.UserVo;
 import kr.or.ddit.util.model.PageVo;
 
@@ -17,7 +14,7 @@ public interface IUserDao {
 	* @return
 	* Method 설명 : 전체 사용자 조회
 	*/
-	List<UserVo> getAllUser(SqlSession sqlSession);
+	List<UserVo> getAllUser();
 	/**
 	* Method : selectUser
 	* 작성자 : PC08
@@ -26,7 +23,7 @@ public interface IUserDao {
 	* @return
 	* Method 설명 : 사용자 조회
 	*/
-	UserVo selectUser(SqlSession sqlSession, String userId);
+	UserVo selectUser(String userId);
 	
 	/**
 	* Method : selectUserPagingList
@@ -36,7 +33,7 @@ public interface IUserDao {
 	* @return
 	* Method 설명 : 사용자 페이징 리스트 조회
 	*/
-	List<UserVo> selectUserPagingList(SqlSession sqlSession, PageVo pageVo);
+	List<UserVo> selectUserPagingList(PageVo pageVo);
 	
 	
 	/**
@@ -46,7 +43,7 @@ public interface IUserDao {
 	* @return
 	* Method 설명 : 전체 사용자 수 조최
 	*/
-	int getUserCnt(SqlSession sqlSession);
+	int getUserCnt();
 	
 	/**
 	* Method : insertUser
@@ -57,7 +54,7 @@ public interface IUserDao {
 	* Method 설명 : 사용자 등록
 	*/
 	
-	int insertUser(SqlSession sqlSession, UserVo userVo);
+	int insertUser(UserVo userVo);
 	
 	
 	/**
@@ -68,7 +65,7 @@ public interface IUserDao {
 	* @return
 	* Method 설명 : 사용자 삭제
 	*/
-	int deleteUser(SqlSession sqlSession, String userId);
+	int deleteUser(String userId);
 	
 	/**
 	* Method : updUser
@@ -79,7 +76,7 @@ public interface IUserDao {
 	* @return
 	* Method 설명 : 사용자 수정
 	*/
-	int updUser(SqlSession sqlSession, UserVo userVo);
+	int updUser(UserVo userVo);
 	
 	/**
 	* Method : encyptPass
@@ -90,5 +87,5 @@ public interface IUserDao {
 	* @return
 	* Method 설명 : 패스워드 암호화 후 업데이트
 	*/
-	int encyptPass(SqlSession sqlSession, UserVo userVo);
+	int encyptPass(UserVo userVo);
 }

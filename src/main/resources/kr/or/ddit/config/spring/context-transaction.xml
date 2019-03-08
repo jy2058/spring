@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="datasource"/>
+	</bean>
+	<!-- 
+		<tx:method rollback-for : ""/>
+		기본적으로 RuntimeException이 발생 할 경우 자동 rollback 처리
+		RuntimeException이 아닌 다른 예외 발생 시 rollback을 처리 하고 싶을 때 설정 하는 옵션 
+	-->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="*" propagation="REQUIRED"/> <!-- 모든 메서드에 transactionManager 적용 -->
+		</tx:attributes>	
+	</tx:advice>
+	
+	<aop:config>							<!-- kr.or.ddit의 모든 패키지 / service로 시작하는 모든 클래스 /-->
+		<aop:advisor advice-ref="txAdvice" pointcut="within(kr.or.ddit..service.*)"/>
+	</aop:config>
+
+</beans>

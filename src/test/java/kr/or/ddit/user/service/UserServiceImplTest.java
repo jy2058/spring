@@ -2,21 +2,19 @@ package kr.or.ddit.user.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
-import java.io.Console;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import kr.or.ddit.test.LogicTestConfig;
 import kr.or.ddit.user.model.UserVo;
 import kr.or.ddit.util.model.PageVo;
-
-import org.junit.Before;
-import org.junit.Test;
 
 public class UserServiceImplTest extends LogicTestConfig {
 
@@ -83,6 +81,8 @@ public class UserServiceImplTest extends LogicTestConfig {
 		userVo.setAddr2("2층 ddit");
 		userVo.setZipcode("34942");
 		userVo.setPass("testpas");
+		userVo.setFilename("");
+		userVo.setRealFilename("");
 
 		/*** When ***/
 		int result = userService.insertUser(userVo);
