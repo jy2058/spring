@@ -12,7 +12,10 @@ import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:kr/or/ddit/config/spring/servlet-context.xml",
-					"classpath:kr/or/ddit/config/spring/application-context.xml"})
+					"classpath:kr/or/ddit/config/spring/application-context.xml",
+					"classpath:kr/or/ddit/config/spring/context-datasource.xml",
+					"classpath:kr/or/ddit/config/spring/context-transaction.xml"
+					})
 @WebAppConfiguration	// 스프링 컨테이너를 만들 때 WepApplicationContext로 생성
 						// 미 적용시 applicationContext
 

@@ -71,5 +71,21 @@
 	 	<property name="maxUploadSize" value="26214400"/> <!-- 파일 5개 -->
 	 	<property name="maxUploadSizePerFile" value="5242880"/>
 	 </bean>
+	 
+	 
+	 <!-- interceptor에서 언어변경 되게 하려고 하는 설정 -->
+	 
+	 <!-- bean 이름 localeResolver로 정해져 있다 -->
+	 <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver"/>
+	 
+	 <!-- localeChangerInterceptor -->
+	 <mvc:interceptors>
+	 	<mvc:interceptor>
+	 		<mvc:mapping path="/**"/>
+	 		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+	 			<property name="paramName" value="language"/>
+	 		</bean>
+	 	</mvc:interceptor>
+	 </mvc:interceptors>
 	
 </beans>
